@@ -1,0 +1,4 @@
+[usb]
+url = http://127.0.0.1/api/v1/dast_webhook
+token = 837e62834b8423418c2a2a311c69fb968318nwqe
+ip = 127.0.0.1,localhost,
