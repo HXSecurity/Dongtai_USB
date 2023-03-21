@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"time"
 
+	"github.com/HXSecurity/Dongtai_USB/config"
 	"github.com/HXSecurity/Dongtai_USB/xray/engine"
 	"github.com/HXSecurity/Dongtai_USB/xray/model"
 	"github.com/gin-gonic/gin"
@@ -23,25 +23,25 @@ var Json map[string]interface{}
 func (s *USB_Xray) Xray(context *gin.Context) {
 	err := context.ShouldBindJSON(&request)
 	if err != nil {
-		log.Print(err.Error(), context)
+		config.Log.Print(err.Error(), context)
 		return
 	}
 
 	res, err := engine_Xray.ReadHTTP(request.Data.Detail.Snapshot, len(request.Data.Detail.Snapshot))
 	if err != nil {
-		log.Print(err)
+		config.Log.Print(err)
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
 	if request.Type != "web_vuln" {
-		log.Printf("上报数据类型不是 web_vuln")
+		config.Log.Printf("上报数据类型不是 web_vuln")
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
 	red := res[0].Response.Header.Get("Dt-Request-Id")
-	log.Println(request.Data.Detail.Snapshot)
+	config.Log.Println(request.Data.Detail.Snapshot)
 	if red == "" {
-		log.Printf("找不到 Dt-Request-Id 请求头")
+		config.Log.Printf("找不到 Dt-Request-Id 请求头")
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
@@ -62,20 +62,20 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		DastTag:         "Xray",
 	}
 
-	log.Println(Response)
+	config.Log.Println(Response)
 	if err := json.NewEncoder(&buffer).Encode(Response); err != nil {
-		log.Printf("json 格式错误")
+		config.Log.Printf("json 格式错误")
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
 	body, err := s.Client(&buffer)
 	if err != nil {
-		log.Println(err)
+		config.Log.Println(err)
 		return
 	}
 	context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 	json.Unmarshal(body, &Json)
-	log.Println(Json)
+	config.Log.Println(Json)
 	// context.JSON(200, gin.H{
 	// 	"msg": "success", "code": 200, "body": Json,
 	// })

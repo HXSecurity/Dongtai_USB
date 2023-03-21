@@ -3,16 +3,15 @@ package main
 import (
 	"github.com/HXSecurity/Dongtai_USB/config"
 	"github.com/HXSecurity/Dongtai_USB/xray/service"
-	"github.com/gin-gonic/gin"
 )
 
+var USB_Xray = new(service.USB_Xray)
+
 func main() {
-	router := gin.Default()
-	config.Viper = config.Config()
+	USB := config.Init()
+	router := USB.Group("api").Use(config.JWTAuth())
+	router.POST("/v1/xray", USB_Xray.Xray)
 
-	var USB_Xray = new(service.USB_Xray)
-	Usbrouter := router.Group("api").Use(config.JWTAuth())
-	Usbrouter.POST("/v1/xray", USB_Xray.Xray)
-
-	router.Run(":5005")
+	config.Log.Printf("The USB runs on port 5005")
+	USB.Run(":5005")
 }
