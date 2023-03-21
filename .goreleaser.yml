@@ -1,0 +1,29 @@
+project_name: Dongtai_usb
+builds:
+  - env: 
+      - CGO_ENABLED=0
+      - GIN_MODE=release
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    id: "Dongtai_usb"
+    binary:
+      'Dongtai_usb'
+
+archives:
+  - files:
+      - none*
+    format: zip
+    id: homebrew
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: linux
+        format: tar.gz
+
