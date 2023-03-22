@@ -16,6 +16,7 @@ func JWTAuth() gin.HandlerFunc {
 		// 	context.Abort()
 		// }
 		if InMap(Viper.GetString("usb.ip"), context.ClientIP()) {
+			Log.Printf("权限不足 403:  " + context.ClientIP())
 			context.JSON(200, gin.H{
 				"msg": "权限不足", "code": 403,
 			})

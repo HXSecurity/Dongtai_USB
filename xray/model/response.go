@@ -13,6 +13,7 @@ type Response struct {
 	DtUUIDID        []string          `json:"dt_uuid_id"`
 	AgentID         []string          `json:"agent_id"`
 	DongtaiVulType  []string          `json:"dongtai_vul_type"`
+	Dtmark          []string          `json:"dt-mark"`
 	DastTag         string            `json:"dast_tag"`
 }
 type RequestMessages struct {

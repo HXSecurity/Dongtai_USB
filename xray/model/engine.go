@@ -12,4 +12,5 @@ type Engine struct {
 	AgentID  []string
 	DtuuidID []string
 	Urls     []string
+	Dtmark   []string
 }

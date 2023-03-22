@@ -38,10 +38,11 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
-	red := res[0].Response.Header.Get("Dt-Request-Id")
+
+	qaq := res[0].Request.Header.Get("dt-mark-header")
 	config.Log.Println(request.Data.Detail.Snapshot)
-	if red == "" {
-		config.Log.Printf("找不到 Dt-Request-Id 请求头")
+	if qaq == "" {
+		config.Log.Printf("找不到 dt-mark-header 请求头")
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
@@ -50,16 +51,17 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		VulName:         request.Data.Target.URL + " " + engine_Xray.VulType(request.Data.Plugin),
 		Detail:          "在" + request.Data.Target.URL + "发现了" + engine_Xray.VulType(request.Data.Plugin),
 		VulLevel:        "HIGH",
-		Urls:            engine_Xray.EngineAdu(res, len(request.Data.Detail.Snapshot)).Urls,
+		Urls:            engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Urls,
 		Payload:         request.Data.Detail.Payload,
 		CreateTime:      time.Now().Unix(),
 		VulType:         engine_Xray.VulType(request.Data.Plugin),
 		RequestMessages: engine_Xray.RequestMessages(request.Data.Detail.Snapshot, len(request.Data.Detail.Snapshot)),
 		Target:          fmt.Sprintf("%s", request.Data.Target),
-		DtUUIDID:        engine_Xray.EngineAdu(res, len(request.Data.Detail.Snapshot)).DtuuidID,
-		AgentID:         engine_Xray.EngineAdu(res, len(request.Data.Detail.Snapshot)).AgentID,
-		DongtaiVulType:  engine_Xray.EngineAdu(res, len(request.Data.Detail.Snapshot)).Urls,
+		DtUUIDID:        engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).DtuuidID,
+		AgentID:         engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).AgentID,
+		DongtaiVulType:  engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Urls,
 		DastTag:         "Xray",
+		Dtmark:          engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Dtmark,
 	}
 
 	config.Log.Println(Response)
@@ -68,7 +70,7 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
-	body, err := s.Client(&buffer)
+	body, err := s.Client(&buffer, context)
 	if err != nil {
 		config.Log.Println(err)
 		return

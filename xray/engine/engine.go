@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/HXSecurity/Dongtai_USB/config"
 	"github.com/HXSecurity/Dongtai_USB/xray/model"
 )
 
@@ -19,15 +20,27 @@ func (engine *Engine_Xray) RequestMessages(Snapshot [][]string, p int) []model.R
 	}
 	return stream
 }
-func (engine *Engine_Xray) EngineAdu(connection []model.Connection, p int) model.Engine {
+func (engine *Engine_Xray) EngineAdu(red string, connection []model.Connection, p int) model.Engine {
 	var req model.Engine
+	if red == "" {
+		config.Log.Printf("找不到 Dt-Request-Id 请求头")
+		for i := 0; i < p; i++ {
+			dtmark := connection[i].Request.Header.Get("dt-mark-header")
+			url := connection[i].Request.URL.String()
+			req.Urls = append(req.Urls, url)
+			req.Dtmark = append(req.Dtmark, dtmark)
+		}
+		return req
+	}
 	for i := 0; i < p; i++ {
 		res := connection[i].Response.Header.Get("Dt-Request-Id")
+		dtmark := connection[i].Request.Header.Get("dt-mark-header")
 		url := connection[i].Request.URL.String()
 		arr := strings.Split(res, ".")
 		req.AgentID = append(req.AgentID, arr[0])
 		req.DtuuidID = append(req.DtuuidID, arr[1])
 		req.Urls = append(req.Urls, url)
+		req.Dtmark = append(req.Dtmark, dtmark)
 	}
 	return req
 }
