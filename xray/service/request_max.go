@@ -19,7 +19,7 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 
 	Response_max := &model.Request_max1{
 		Limit:  1,
-		Offset: 1,
+		Offset: 0,
 		CreatedTime: model.CreatedTime{
 			Before: before,
 			After:  after,
@@ -58,9 +58,9 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 		Detail, Connection, err := engine_Xray.ReadHTTP_max(xray_max.Detail)
 		if err != nil {
 			config.Log.Print(err)
+			return
 		}
-		// config.Log.Println(Detail)
-		config.Log.Println(Connection[0].Response)
+
 		var st []string
 		Response := &model.Response{
 			VulName:         xray_max.Target.URL + " " + xray_max.Category,
@@ -72,13 +72,12 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 			VulType:         xray_max.Category,
 			RequestMessages: engine_Xray.RequestMessages_max(Detail, len(Detail)),
 			Target:          xray_max.Target.URL,
-			// DtUUIDID:        engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).DtuuidID,
-			// AgentID:         engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).AgentID,
-			DongtaiVulType: st,
-			DastTag:        "Xray",
-			// Dtmark:          engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
+			DtUUIDID:        engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).DtuuidID,
+			AgentID:         engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).AgentID,
+			DongtaiVulType:  st,
+			DastTag:         "Xray",
+			Dtmark:          engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
 		}
 		config.Log.Print(s.Client(Response))
-		config.Log.Print(Connection)
 	}
 }
