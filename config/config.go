@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Config(path ...string) *viper.Viper {
+func (usb *USB_config) Config(path ...string) *viper.Viper {
 	config := viper.New()
 	config.AddConfigPath("./")
 	config.SetConfigName("config-tutorial")

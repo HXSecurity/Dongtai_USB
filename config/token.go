@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func JWTAuth() gin.HandlerFunc {
+func (usb *USB_config) JWTAuth() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		// token := context.Request.Header.Get("x-token")
 		// if token == "" {
@@ -15,7 +15,7 @@ func JWTAuth() gin.HandlerFunc {
 		// 	})
 		// 	context.Abort()
 		// }
-		if InMap(Viper.GetString("usb.ip"), context.ClientIP()) {
+		if usb.InMap(Viper.GetString("usb.ip"), context.ClientIP()) {
 			Log.Printf("权限不足 403:  " + context.ClientIP())
 			context.JSON(200, gin.H{
 				"msg": "权限不足", "code": 403,
@@ -26,7 +26,7 @@ func JWTAuth() gin.HandlerFunc {
 	}
 }
 
-func InMap(m string, i string) bool {
+func (usb *USB_config) InMap(m string, i string) bool {
 	arr := strings.Split(m, ",")
 	set := make(map[string]struct{})
 	for _, value := range arr {

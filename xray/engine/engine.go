@@ -27,6 +27,7 @@ func (engine *Engine_Xray) EngineAdu(red string, connection []model.Connection, 
 		for i := 0; i < p; i++ {
 			dtmark := connection[i].Request.Header.Get("dt-mark-header")
 			url := connection[i].Request.URL.String()
+			//增加url切割，如果有？只要？前面的
 			req.Urls = append(req.Urls, url)
 			req.Dtmark = append(req.Dtmark, dtmark)
 		}

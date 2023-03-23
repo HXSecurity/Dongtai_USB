@@ -1,9 +1,6 @@
 package service
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"time"
 
 	"github.com/HXSecurity/Dongtai_USB/config"
@@ -16,11 +13,10 @@ type USB_Xray struct {
 }
 
 var engine_Xray = new(engine.Engine_Xray)
-var buffer bytes.Buffer
-var request model.Request
-var Json map[string]interface{}
 
 func (s *USB_Xray) Xray(context *gin.Context) {
+
+	var request model.Request
 	err := context.ShouldBindJSON(&request)
 	if err != nil {
 		config.Log.Print(err.Error(), context)
@@ -46,7 +42,7 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
-
+	var st []string
 	Response := &model.Response{
 		VulName:         request.Data.Target.URL + " " + engine_Xray.VulType(request.Data.Plugin),
 		Detail:          "在" + request.Data.Target.URL + "发现了" + engine_Xray.VulType(request.Data.Plugin),
@@ -56,29 +52,12 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		CreateTime:      time.Now().Unix(),
 		VulType:         engine_Xray.VulType(request.Data.Plugin),
 		RequestMessages: engine_Xray.RequestMessages(request.Data.Detail.Snapshot, len(request.Data.Detail.Snapshot)),
-		Target:          fmt.Sprintf("%s", request.Data.Target),
+		Target:          request.Data.Target.URL,
 		DtUUIDID:        engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).DtuuidID,
 		AgentID:         engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).AgentID,
-		DongtaiVulType:  engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Urls,
+		DongtaiVulType:  st,
 		DastTag:         "Xray",
 		Dtmark:          engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Dtmark,
 	}
-
-	config.Log.Println(Response)
-	if err := json.NewEncoder(&buffer).Encode(Response); err != nil {
-		config.Log.Printf("json 格式错误")
-		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
-		return
-	}
-	body, err := s.Client(&buffer, context)
-	if err != nil {
-		config.Log.Println(err)
-		return
-	}
-	context.Data(200, "application/json; charset=utf-8", []byte("ok"))
-	json.Unmarshal(body, &Json)
-	config.Log.Println(Json)
-	// context.JSON(200, gin.H{
-	// 	"msg": "success", "code": 200, "body": Json,
-	// })
+	context.Data(200, "application/json; charset=utf-8", []byte(s.Client(Response, context)))
 }

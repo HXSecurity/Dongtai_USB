@@ -14,3 +14,8 @@ type Engine struct {
 	Urls     []string
 	Dtmark   []string
 }
+
+type Detail struct {
+	Request  string
+	Response string
+}

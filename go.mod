@@ -3,11 +3,15 @@ module github.com/HXSecurity/Dongtai_USB
 go 1.19
 
 require (
+	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/gin-gonic/gin v1.9.0
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.15.0
+	github.com/yuin/goldmark v1.4.13
 )
 
 require (
+	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/bytedance/sonic v1.8.0 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
