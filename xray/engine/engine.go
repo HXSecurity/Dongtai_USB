@@ -28,6 +28,12 @@ func (engine *Engine_Xray) EngineXray(agent string, connection []model.Connectio
 	for i := 0; i < p; i++ {
 		dtmark := connection[i].Request.Header.Get("dt-mark-header")
 		url := connection[i].Request.URL.String()
+		if strings.Contains(url, "?") {
+			URL_arr := strings.Split(agent, "?")
+			xray.Urls = append(xray.Urls, URL_arr[0])
+		} else {
+			xray.Urls = append(xray.Urls, url)
+		}
 		//增加url切割，如果有？只要？前面的
 		if agent == "" {
 			config.Log.Printf("找不到 Dt-Request-Id 请求头")
@@ -44,7 +50,7 @@ func (engine *Engine_Xray) EngineXray(agent string, connection []model.Connectio
 		} else {
 			xray.Dtmark = append(xray.Dtmark, dtmark)
 		}
-		xray.Urls = append(xray.Urls, url)
+
 	}
 	return xray
 }
