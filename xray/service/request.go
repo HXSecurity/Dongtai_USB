@@ -35,29 +35,29 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		return
 	}
 
-	qaq := res[0].Request.Header.Get("dt-mark-header")
+	agent := res[0].Response.Header.Get("Dt-Request-Id")
 	config.Log.Println(request.Data.Detail.Snapshot)
-	if qaq == "" {
-		config.Log.Printf("找不到 dt-mark-header 请求头")
+	if agent == "" {
+		config.Log.Printf("找不到 Dt-Request-Id 请求头")
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
-	var st []string
+	st := make([]string, 0)
 	Response := &model.Response{
 		VulName:         request.Data.Target.URL + " " + engine_Xray.VulType(request.Data.Plugin),
 		Detail:          "在" + request.Data.Target.URL + "发现了" + engine_Xray.VulType(request.Data.Plugin),
 		VulLevel:        "HIGH",
-		Urls:            engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Urls,
+		Urls:            engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Urls,
 		Payload:         request.Data.Detail.Payload,
 		CreateTime:      time.Now().Unix(),
 		VulType:         engine_Xray.VulType(request.Data.Plugin),
 		RequestMessages: engine_Xray.RequestMessages(request.Data.Detail.Snapshot, len(request.Data.Detail.Snapshot)),
 		Target:          request.Data.Target.URL,
-		DtUUIDID:        engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).DtuuidID,
-		AgentID:         engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).AgentID,
+		DtUUIDID:        engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).DtuuidID,
+		AgentID:         engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).AgentID,
 		DongtaiVulType:  st,
 		DastTag:         "Xray",
-		Dtmark:          engine_Xray.EngineAdu(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Dtmark,
+		Dtmark:          engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Dtmark,
 	}
 	context.Data(200, "application/json; charset=utf-8", []byte(s.Client(Response, context)))
 }

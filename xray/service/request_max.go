@@ -55,29 +55,38 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 
 	for i := 0; i < len(Request_max2.Data.Content); i++ {
 		xray_max := Request_max2.Data.Content[i]
+
 		Detail, Connection, err := engine_Xray.ReadHTTP_max(xray_max.Detail)
 		if err != nil {
 			config.Log.Print(err)
 			return
 		}
+		config.Log.Println(xray_max.Detail)
+		agent := Connection[0].Response.Header.Get("Dt-Request-Id")
+		if agent == "" {
+			config.Log.Printf("找不到 Dt-Request-Id 请求头")
+			return
+		}
 
-		var st []string
+		st := make([]string, 0)
+
 		Response := &model.Response{
 			VulName:         xray_max.Target.URL + " " + xray_max.Category,
 			Detail:          "在" + xray_max.Target.URL + "发现了" + xray_max.Title,
 			VulLevel:        "HIGH",
-			Urls:            engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Urls,
+			Urls:            engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Urls,
 			Payload:         fmt.Sprintf("%s", xray_max.Target.Params...),
 			CreateTime:      time.Now().Unix(),
 			VulType:         xray_max.Category,
 			RequestMessages: engine_Xray.RequestMessages_max(Detail, len(Detail)),
 			Target:          xray_max.Target.URL,
-			DtUUIDID:        engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).DtuuidID,
-			AgentID:         engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).AgentID,
+			DtUUIDID:        engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).DtuuidID,
+			AgentID:         engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).AgentID,
 			DongtaiVulType:  st,
 			DastTag:         "Xray",
-			Dtmark:          engine_Xray.EngineAdu(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
+			Dtmark:          engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
 		}
+		config.Log.Print(Response)
 		config.Log.Print(s.Client(Response))
 	}
 }

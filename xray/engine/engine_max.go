@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/HXSecurity/Dongtai_USB/config"
 	"github.com/HXSecurity/Dongtai_USB/xray/model"
 )
 
@@ -33,26 +32,20 @@ func (engine *Engine_Xray) ReadHTTP_max(xray_max string) ([]model.Detail, []mode
 	}
 
 	for i := 0; i < len(stream1); i++ {
-		config.Log.Print(strings.TrimSpace(stream1[i].Request) + "\r\n\r\n")
-		config.Log.Print(strings.TrimSpace(stream1[i].Response) + "\r\n\r\n")
 		req, err := http.ReadRequest(bufio.NewReader(strings.NewReader(strings.TrimSpace(stream1[i].Request) + "\r\n\r\n")))
 		if err != nil && errors.Is(err, io.EOF) {
 			return nil, nil, err
 		}
-
 		if err != nil {
 			return nil, nil, err
 		}
-
 		res, err := http.ReadResponse(bufio.NewReader(strings.NewReader(strings.TrimSpace(stream1[i].Response)+"\r\n\r\n")), req)
 		if err != nil && errors.Is(err, io.EOF) {
 			return nil, nil, err
 		}
-
 		if err != nil {
 			return nil, nil, err
 		}
-
 		stream2 = append(stream2, model.Connection{Request: req, Response: res})
 	}
 

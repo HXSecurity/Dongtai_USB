@@ -20,30 +20,33 @@ func (engine *Engine_Xray) RequestMessages(Snapshot [][]string, p int) []model.R
 	}
 	return stream
 }
-func (engine *Engine_Xray) EngineAdu(red string, connection []model.Connection, p int) model.Engine {
-	var req model.Engine
-	if red == "" {
-		config.Log.Printf("找不到 Dt-Request-Id 请求头")
-		for i := 0; i < p; i++ {
-			dtmark := connection[i].Request.Header.Get("dt-mark-header")
-			url := connection[i].Request.URL.String()
-			//增加url切割，如果有？只要？前面的
-			req.Urls = append(req.Urls, url)
-			req.Dtmark = append(req.Dtmark, dtmark)
-		}
-		return req
-	}
+func (engine *Engine_Xray) EngineXray(agent string, connection []model.Connection, p int) model.Engine {
+	var xray model.Engine
+	AgentID := make([]string, 0)
+	DtuuidID := make([]string, 0)
+	Dtmark := make([]string, 0)
 	for i := 0; i < p; i++ {
-		res := connection[i].Response.Header.Get("Dt-Request-Id")
 		dtmark := connection[i].Request.Header.Get("dt-mark-header")
 		url := connection[i].Request.URL.String()
-		arr := strings.Split(res, ".")
-		req.AgentID = append(req.AgentID, arr[0])
-		req.DtuuidID = append(req.DtuuidID, arr[1])
-		req.Urls = append(req.Urls, url)
-		req.Dtmark = append(req.Dtmark, dtmark)
+		//增加url切割，如果有？只要？前面的
+		if agent == "" {
+			config.Log.Printf("找不到 Dt-Request-Id 请求头")
+			xray.AgentID = AgentID
+			xray.DtuuidID = DtuuidID
+		} else {
+			arr := strings.Split(agent, ".")
+			xray.AgentID = append(xray.AgentID, arr[0])
+			xray.DtuuidID = append(xray.DtuuidID, arr[1])
+		}
+		if dtmark == "" {
+			config.Log.Printf("找不到 dt-mark-header 请求头")
+			xray.Dtmark = Dtmark
+		} else {
+			xray.Dtmark = append(xray.Dtmark, dtmark)
+		}
+		xray.Urls = append(xray.Urls, url)
 	}
-	return req
+	return xray
 }
 
 func (engine *Engine_Xray) ReadHTTP(Snapshot [][]string, p int) ([]model.Connection, error) {

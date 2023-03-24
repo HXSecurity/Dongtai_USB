@@ -41,5 +41,6 @@ func (s *USB_Xray) Client(content *model.Response, c ...interface{}) string {
 	}
 	json.Unmarshal(body, &Json)
 	config.Log.Println(Json)
+	config.Log.Println(res.StatusCode)
 	return "ok"
 }
