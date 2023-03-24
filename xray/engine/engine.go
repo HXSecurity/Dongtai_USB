@@ -29,12 +29,11 @@ func (engine *Engine_Xray) EngineXray(agent string, connection []model.Connectio
 		dtmark := connection[i].Request.Header.Get("dt-mark-header")
 		url := connection[i].Request.URL.String()
 		if strings.Contains(url, "?") {
-			URL_arr := strings.Split(agent, "?")
+			URL_arr := strings.Split(url, "?")
 			xray.Urls = append(xray.Urls, URL_arr[0])
 		} else {
 			xray.Urls = append(xray.Urls, url)
 		}
-		//增加url切割，如果有？只要？前面的
 		if agent == "" {
 			config.Log.Printf("找不到 Dt-Request-Id 请求头")
 			xray.AgentID = AgentID
