@@ -14,6 +14,10 @@ import (
 )
 
 func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
+	if config.Viper.GetString("usb.xray_url") == "" {
+		config.Log.Printf("USB 扫描中 !!!")
+		return
+	}
 	var buffer bytes.Buffer
 	var Request_max2 model.Request_max2
 
@@ -68,8 +72,6 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 			return
 		}
 
-		st := make([]string, 0)
-
 		Response := &model.Response{
 			VulName:         xray_max.Target.URL + " " + xray_max.Category,
 			Detail:          "在" + xray_max.Target.URL + "发现了" + xray_max.Title,
@@ -82,7 +84,7 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 			Target:          xray_max.Target.URL,
 			DtUUIDID:        engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).DtuuidID,
 			AgentID:         engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).AgentID,
-			DongtaiVulType:  st,
+			DongtaiVulType:  []string{(model.Vultype()[xray_max.Category])},
 			DastTag:         "Xray",
 			Dtmark:          engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
 		}
