@@ -42,7 +42,7 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		context.Data(200, "application/json; charset=utf-8", []byte("ok"))
 		return
 	}
-	st := make([]string, 0)
+	config.Log.Println("我的漏洞格式是 ============" + engine_Xray.VulType(request.Data.Plugin) + "=========================")
 	Response := &model.Response{
 		VulName:         request.Data.Target.URL + " " + engine_Xray.VulType(request.Data.Plugin),
 		Detail:          "在" + request.Data.Target.URL + "发现了" + engine_Xray.VulType(request.Data.Plugin),
@@ -55,7 +55,7 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		Target:          request.Data.Target.URL,
 		DtUUIDID:        engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).DtuuidID,
 		AgentID:         engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).AgentID,
-		DongtaiVulType:  st,
+		DongtaiVulType:  []string{(model.Vultype()[engine_Xray.VulType(request.Data.Plugin)])},
 		DastTag:         "Xray",
 		Dtmark:          engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Dtmark,
 	}
