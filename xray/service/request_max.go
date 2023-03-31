@@ -22,7 +22,7 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 	var Request_max2 model.Request_max2
 
 	Response_max := &model.Request_max1{
-		Limit:  1,
+		Limit:  10,
 		Offset: 0,
 		CreatedTime: model.CreatedTime{
 			Before: before,
