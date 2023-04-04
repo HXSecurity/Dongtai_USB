@@ -50,8 +50,7 @@ jobs:
           registry: ${{ secrets.ALIYUN_REGISTRY }}
           username: ${{ secrets.ALIYUN_DOCKERHUB_USER }}
           password: ${{ secrets.ALIYUN_DOCKERHUB_PASSWORD }}
-
-      - name: Build and push xray
+      - name: Build and push usb
         uses: docker/build-push-action@v3
         with:
           file: ./Dockerfile
@@ -60,3 +59,21 @@ jobs:
           push: true
           tags: |
             registry.cn-beijing.aliyuncs.com/huoxian_pub/usb:v${{ env.tag_version }}
+      - name: Build and push mitmproxy
+        uses: docker/build-push-action@v3
+        with:
+          file: ./deploy/mitmproxy/Dockerfile
+          context: ./deploy/mitmproxy
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            registry.cn-beijing.aliyuncs.com/huoxian_pub/mitmproxy:v${{ env.tag_version }}
+      - name: Build and push xray
+        uses: docker/build-push-action@v3
+        with:
+          file: ./deploy/xray/Dockerfile
+          context: ./deploy/xray
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            registry.cn-beijing.aliyuncs.com/huoxian_pub/xray:v${{ env.tag_version }}

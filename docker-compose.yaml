@@ -1,17 +1,17 @@
 version: "3"
 services:
   xray:
-    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/xray:v${{ env.tag_version }}
+    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/xray:v3
     restart: always
 
   usb:
-    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/usb:v${{ env.tag_version }}
+    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/usb:v3
     restart: always
     volumes:
       - ./config-tutorial.ini:/opt/config-tutorial.ini
 
   mitmproxy:
-    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/mitmproxy:v${{ env.tag_version }}
+    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/mitmproxy:v3
     restart: always
     environment:
       XRAY_URL: 'xray'
