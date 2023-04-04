@@ -1,16 +1,29 @@
 version: "3"
+
+networks:
+  network:
+    ipam:
+      driver: default
+      config:
+        - subnet: '177.7.0.0/16'
 services:
   xray:
     image: registry.cn-beijing.aliyuncs.com/huoxian_pub/xray:v0.0.3
     environment:
       XRAY_SHELL: 'webscan --listen 0.0.0.0:9811 --webhook-output http://usb:5005/api/v1/xray'
     restart: always
+    networks:
+      network:
+        ipv4_address: 177.7.0.11
 
   usb:
     image: registry.cn-beijing.aliyuncs.com/huoxian_pub/usb:v0.0.3
     restart: always
     volumes:
       - ./config-tutorial.ini:/opt/config-tutorial.ini
+    networks:
+      network:
+        ipv4_address: 177.7.0.12
 
   mitmproxy:
     image: registry.cn-beijing.aliyuncs.com/huoxian_pub/mitmproxy:v0.0.3
@@ -19,3 +32,6 @@ services:
       XRAY_URL: 'xray'
     ports:
       - '10802:10802'
+    networks:
+      network:
+        ipv4_address: 177.7.0.13

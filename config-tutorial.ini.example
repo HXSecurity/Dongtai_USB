@@ -1,5 +1,5 @@
 [usb]
-ip = 127.0.0.1,localhost,192.168.0.98,192.168.0.107
+ip = 177.7.0.11,127.0.0.1,localhost
 
 iast_url = http://127.0.0.1/api/v1/dast_webhook
 dast_token = 837e62834b8423418c2a2a311c6
