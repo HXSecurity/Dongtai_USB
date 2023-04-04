@@ -32,6 +32,7 @@ services:
       XRAY_URL: 'xray'
     ports:
       - '10802:10802'
+      - '8090:8000'
     networks:
       network:
         ipv4_address: 177.7.0.13
