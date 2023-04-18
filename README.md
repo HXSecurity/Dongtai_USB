@@ -2,7 +2,7 @@
 
 # 转换器配置文件(放在当前目录下)：config-tutorial.ini.example 
 ```
-ip: 访问地址白名单
+ip: xray访问地址白名单,默认不需要修改
 iast_url：iast地址
 dast_token： iast对应dast_token
 xray_url：商业版xray地址
