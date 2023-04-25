@@ -8,7 +8,7 @@ networks:
         - subnet: '177.7.0.0/16'
 services:
   xray:
-    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/xray:v0.1.0
+    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/xray:v0.1.1
     environment:
       XRAY_SHELL: 'webscan --listen 0.0.0.0:9811 --webhook-output http://usb:5005/api/v1/xray'
     restart: always
@@ -19,7 +19,7 @@ services:
         ipv4_address: 177.7.0.11
 
   usb:
-    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/usb:v0.1.0
+    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/usb:v0.1.1
     restart: always
     volumes:
       - ./config-tutorial.ini:/opt/config-tutorial.ini
@@ -28,7 +28,7 @@ services:
         ipv4_address: 177.7.0.12
 
   mitmproxy:
-    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/mitmproxy:v0.1.0
+    image: registry.cn-beijing.aliyuncs.com/huoxian_pub/mitmproxy:v0.1.1
     restart: always
     environment:
       XRAY_URL: 'xray'
