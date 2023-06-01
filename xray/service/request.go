@@ -46,7 +46,7 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 	Response := &model.Response{
 		VulName:         request.Data.Target.URL + " " + engine_Xray.VulType(request.Data.Plugin),
 		Detail:          "在" + request.Data.Target.URL + "发现了" + engine_Xray.VulType(request.Data.Plugin),
-		VulLevel:        "HIGH",
+		VulLevel:        (model.VulLevel()[engine_Xray.VulType(request.Data.Plugin)]),
 		Urls:            engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Urls,
 		Payload:         request.Data.Detail.Payload,
 		CreateTime:      time.Now().Unix(),
