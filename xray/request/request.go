@@ -1,9 +1,10 @@
-package service
+package request
 
 import (
 	"time"
 
 	"github.com/HXSecurity/Dongtai_USB/config"
+	"github.com/HXSecurity/Dongtai_USB/service"
 	"github.com/HXSecurity/Dongtai_USB/xray/engine"
 	"github.com/HXSecurity/Dongtai_USB/xray/model"
 	"github.com/gin-gonic/gin"
@@ -43,7 +44,7 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		return
 	}
 	config.Log.Println("我的漏洞格式是 ============" + engine_Xray.VulType(request.Data.Plugin) + "=========================")
-	Response := &model.Response{
+	Response := &service.Response{
 		VulName:         request.Data.Target.URL + " " + engine_Xray.VulType(request.Data.Plugin),
 		Detail:          "在" + request.Data.Target.URL + "发现了" + engine_Xray.VulType(request.Data.Plugin),
 		VulLevel:        (model.VulLevel()[engine_Xray.VulType(request.Data.Plugin)]),
@@ -59,5 +60,6 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		DastTag:         "Xray",
 		Dtmark:          engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Dtmark,
 	}
-	context.Data(200, "application/json; charset=utf-8", []byte(s.Client(Response, context)))
+	config.Log.Print(Response)
+	context.Data(200, "application/json; charset=utf-8", []byte(service.Client(Response, context)))
 }

@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/HXSecurity/Dongtai_USB/config"
-	"github.com/HXSecurity/Dongtai_USB/xray/service"
+	"github.com/HXSecurity/Dongtai_USB/xray/request"
 )
 
 var usb = new(config.USB_config)
-var USB_Xray = new(service.USB_Xray)
+var USB_Xray = new(request.USB_Xray)
 
 func main() {
 	USB := usb.Init(USB_Xray.Xray_cron)

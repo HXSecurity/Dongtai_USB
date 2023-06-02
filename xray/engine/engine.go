@@ -7,16 +7,17 @@ import (
 	"strings"
 
 	"github.com/HXSecurity/Dongtai_USB/config"
+	"github.com/HXSecurity/Dongtai_USB/service"
 	"github.com/HXSecurity/Dongtai_USB/xray/model"
 )
 
 type Engine_Xray struct {
 }
 
-func (engine *Engine_Xray) RequestMessages(Snapshot [][]string, p int) []model.RequestMessages {
-	stream := make([]model.RequestMessages, 0)
+func (engine *Engine_Xray) RequestMessages(Snapshot [][]string, p int) []service.RequestMessages {
+	stream := make([]service.RequestMessages, 0)
 	for i := 0; i < p; i++ {
-		stream = append(stream, model.RequestMessages{Request: Snapshot[i][0], Response: Snapshot[i][1]})
+		stream = append(stream, service.RequestMessages{Request: Snapshot[i][0], Response: Snapshot[i][1]})
 	}
 	return stream
 }

@@ -1,4 +1,4 @@
-package service
+package request
 
 import (
 	"bytes"
@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/HXSecurity/Dongtai_USB/config"
+	"github.com/HXSecurity/Dongtai_USB/service"
 	"github.com/HXSecurity/Dongtai_USB/xray/model"
 )
 
@@ -72,7 +73,7 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 			return
 		}
 
-		Response := &model.Response{
+		Response := &service.Response{
 			VulName:         xray_max.Target.URL + " " + xray_max.Category,
 			Detail:          "在" + xray_max.Target.URL + "发现了" + xray_max.Title,
 			VulLevel:        "HIGH",
@@ -89,6 +90,6 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 			Dtmark:          engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
 		}
 		config.Log.Print(Response)
-		config.Log.Print(s.Client(Response))
+		config.Log.Print(service.Client(Response))
 	}
 }

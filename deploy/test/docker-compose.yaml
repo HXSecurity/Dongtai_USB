@@ -12,6 +12,8 @@ services:
     environment:
       XRAY_SHELL: 'webscan --listen 0.0.0.0:9811 --webhook-output http://usb:5005/api/v1/xray'
     restart: always
+    volumes:
+      - ./config.yaml:/opt/config.yaml
     ports:
       - '8091:8091'
     networks:

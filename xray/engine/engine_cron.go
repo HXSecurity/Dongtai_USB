@@ -7,16 +7,17 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/HXSecurity/Dongtai_USB/service"
 	"github.com/HXSecurity/Dongtai_USB/xray/model"
 )
 
 func EngineAdu_max() {
 
 }
-func (engine *Engine_Xray) RequestMessages_max(Snapshot []model.Detail, p int) []model.RequestMessages {
-	stream := make([]model.RequestMessages, 0)
+func (engine *Engine_Xray) RequestMessages_max(Snapshot []model.Detail, p int) []service.RequestMessages {
+	stream := make([]service.RequestMessages, 0)
 	for i := 0; i < p; i++ {
-		stream = append(stream, model.RequestMessages{Request: Snapshot[i].Request, Response: Snapshot[i].Response})
+		stream = append(stream, service.RequestMessages{Request: Snapshot[i].Request, Response: Snapshot[i].Response})
 	}
 	return stream
 }

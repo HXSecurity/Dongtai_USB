@@ -4,14 +4,12 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-
 	"net/http"
 
 	"github.com/HXSecurity/Dongtai_USB/config"
-	"github.com/HXSecurity/Dongtai_USB/xray/model"
 )
 
-func (s *USB_Xray) Client(content *model.Response, c ...interface{}) string {
+func Client(content *Response, c ...interface{}) string {
 	var Json map[string]interface{}
 	var buffer bytes.Buffer
 	if err := json.NewEncoder(&buffer).Encode(content); err != nil {

@@ -1,4 +1,4 @@
-package model
+package service
 
 type Response struct {
 	VulName         string            `json:"vul_name"`
