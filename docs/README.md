@@ -25,7 +25,7 @@ docker-compose up -d
 ```
 用户 ==> 浏览器代理 ==> mitmproxy ==> xray ==> dongtai_usb ==> 洞态IAST
 ```
-![Alt text](image-4.png)
+![Alt text](image-1.png)
 
 
 1. 需要添加两个 header 响应头
@@ -33,11 +33,11 @@ docker-compose up -d
 Dt-Request-Id
 dt-mark-header
 ```
-2. 通过 mitmproxy 添加 dt-mark-header 响应头
+2. 通过 mitmproxy 自动添加 dt-mark-header 响应头
 ```
 flow.request.headers["dt-mark-header"] = uuid.uuid4().hex
 ```
-3. 通过 agent 添加 Dt-Request-Id  响应头
+3. 通过 洞态agent 自动添加 Dt-Request-Id  响应头
 ```
 dt-request-id : <agent_id>.<uuid>
 ```
@@ -150,7 +150,7 @@ func VulLevel() map[string]string {
 拉流模式(cron): 即dongtai_usb主动从黑盒扫描器定时拉取数据
 ```
 
-![Alt text](image-3.png)
+![Alt text](image-2.png)
 ### 开发完成后在main方法添加启用即可，如xray
 ```
 推流模式(webhook):
