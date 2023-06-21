@@ -89,7 +89,12 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 			DastTag:         "Xray",
 			Dtmark:          engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
 		}
-		config.Log.Print(Response)
+		resResponse, err := json.Marshal(Response)
+		if err != nil {
+			config.Log.Printf("无法解析json")
+		} else {
+			config.Log.Print(string(resResponse))
+		}
 		config.Log.Print(service.Client(Response))
 	}
 }

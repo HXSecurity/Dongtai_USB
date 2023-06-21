@@ -1,6 +1,7 @@
 package request
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/HXSecurity/Dongtai_USB/config"
@@ -60,6 +61,11 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		DastTag:         "Xray",
 		Dtmark:          engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Dtmark,
 	}
-	config.Log.Print(Response)
+	resResponse, err := json.Marshal(Response)
+	if err != nil {
+		config.Log.Printf("无法解析json")
+	} else {
+		config.Log.Print(string(resResponse))
+	}
 	context.Data(200, "application/json; charset=utf-8", []byte(service.Client(Response, context)))
 }
