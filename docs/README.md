@@ -100,7 +100,28 @@ type Target struct {
     "dast_tag":"", # 所集成的黑盒扫描器标识
 }
 ```
-
+6. 上报消息示例
+```
+{
+	"vul_name": "http://192.168.1.37:8001/xxe/Digester/vuln xxe",
+	"detail": "在http://192.168.1.37:8001/xxe/Digester/vuln发现了xxe",
+	"vul_level": "MEDIUM",
+	"urls": ["/xxe/Digester/vuln"],
+	"payload": "\u003c?xml version=\"1.0\"?\u003e\u003c!DOCTYPE ANY [\u003c!ENTITY content SYSTEM \"XRAY_RURL\"\u003e]\u003e\u003ca\u003e\u0026content;\u003c/a\u003e",
+	"create_time": 1687334492,
+	"vul_type": "xxe",
+	"request_messages": [{
+		"request": "POST /xxe/Digester/vuln HTTP/1.1\r\nHost: 192.168.1.37:8001\r\nUser-Agent: Xray_Test\r\nContent-Length: 123\r\nAccept: */*\r\nContent-Type: application/xml\r\nCookie: XSRF-TOKEN=b8442e83-8a47-4703-9b4c-b0e74dc214f8; JSESSIONID=60EB9A6A04AAF9416210F3951788EA81\r\nDt-Dast: Xray\r\nDt-Mark-Header: b9c9ddd59de04c479577851db7dd0242\r\nXray: x\r\nAccept-Encoding: gzip\r\n\r\n\u003c?xml version=\"1.0\"?\u003e\u003c!DOCTYPE ANY [\u003c!ENTITY content SYSTEM \"http://177.7.0.11:8091/i/4d6816/1pqo/b9t8/\"\u003e]\u003e\u003ca\u003e\u0026content;\u003c/a\u003e",
+		"response": "HTTP/1.1 200 \r\nCache-Control: no-cache, no-store, max-age=0, must-revalidate\r\nContent-Length: 22\r\nContent-Type: text/plain;charset=UTF-8\r\nDate: Wed, 21 Jun 2023 08:01:31 GMT\r\nDongtai: v1.10.0\r\nDt-Request-Id: 17.0ce4ae9dca114fd084a2070cf96e99cd\r\nExpires: 0\r\nPragma: no-cache\r\nX-Application-Context: application\r\nX-Content-Type-Options: nosniff\r\nX-Frame-Options: DENY\r\nX-Xss-Protection: 1; mode=block\r\n\r\nDigester xxe vuln code"
+	}],
+	"target": "http://192.168.1.37:8001/xxe/Digester/vuln",
+	"dt_uuid_id": ["0ce4ae9dca114fd084a2070cf96e99cd"],
+	"agent_id": ["17"],
+	"dongtai_vul_type": ["xxe"],
+	"dt_mark": ["b9c9ddd59de04c479577851db7dd0242"],
+	"dast_tag": "Xray"
+}
+```
 
 
 ## 如何开发一个新的黑盒扫描器
