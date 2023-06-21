@@ -7,7 +7,11 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
-func (usb *USB_config) Cron(timer func(time.Time, time.Time)) {
+func (usb *USB_config) Cron(name string, timer func(time.Time, time.Time)) {
+	if Viper.GetString("usb.type") != name {
+		return
+	}
+	Log.Printf("开始自动拉取黑盒扫描器数据: (" + name + ")")
 	c := cron.New(cron.WithSeconds())
 	c.AddFunc("*/5 * * * * *", func() {
 		// st, _ := time.ParseDuration("-700000s")

@@ -16,9 +16,9 @@ import (
 
 func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 	if config.Viper.GetString("usb.xray_url") == "" {
-		config.Log.Printf("USB 扫描中 !!!")
 		return
 	}
+	config.Log.Printf("正在自动从 xray 拉取数据 !!!")
 	var buffer bytes.Buffer
 	var Request_max2 model.Request_max2
 
@@ -76,16 +76,16 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 		Response := &service.Response{
 			VulName:         xray_max.Target.URL + " " + xray_max.Category,
 			Detail:          "在" + xray_max.Target.URL + "发现了" + xray_max.Title,
-			VulLevel:        "HIGH",
+			VulLevel:        (model.VulLevel()[engine_Xray.VulType(xray_max.Category)]),
 			Urls:            engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Urls,
 			Payload:         fmt.Sprintf("%s", xray_max.Target.Params...),
 			CreateTime:      time.Now().Unix(),
-			VulType:         xray_max.Category,
+			VulType:         engine_Xray.VulType(xray_max.Category),
 			RequestMessages: engine_Xray.RequestMessages_max(Detail, len(Detail)),
 			Target:          xray_max.Target.URL,
 			DtUUIDID:        engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).DtuuidID,
 			AgentID:         engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).AgentID,
-			DongtaiVulType:  []string{(model.Vultype()[xray_max.Category])},
+			DongtaiVulType:  []string{(model.Vultype()[engine_Xray.VulType(xray_max.Category)])},
 			DastTag:         "Xray",
 			Dtmark:          engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
 		}

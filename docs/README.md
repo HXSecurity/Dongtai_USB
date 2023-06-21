@@ -6,6 +6,7 @@
 ip: xray访问地址白名单,默认不需要修改
 iast_url：iast地址
 dast_token： iast对应dast_token
+type: 扫描器类型（xray）
 xray_url：商业版xray地址
 xray_token： 商业版xray-token
 ```
@@ -24,10 +25,10 @@ docker-compose up -d
 ```
 用户 ==> 浏览器代理 ==> mitmproxy ==> xray ==> dongtai_usb ==> 洞态IAST
 ```
-![Alt text](image.png)
+![Alt text](image-4.png)
 
 
-1. agent 漏洞上报需要添加两个 header 响应头
+1. 需要添加两个 header 响应头
 ```
 Dt-Request-Id
 dt-mark-header
@@ -36,7 +37,7 @@ dt-mark-header
 ```
 flow.request.headers["dt-mark-header"] = uuid.uuid4().hex
 ```
-3. Dt-Request-Id 响应头由 agent 创建
+3. 通过 agent 添加 Dt-Request-Id  响应头
 ```
 dt-request-id : <agent_id>.<uuid>
 ```
@@ -75,7 +76,7 @@ type Target struct {
 }
 ```
 
-Response 结构体详解
+5. Response 结构体详解
 ```
 {
     "vul_name": "",#漏洞名 格式为 target+漏洞类型
@@ -102,7 +103,7 @@ Response 结构体详解
 
 
 
-如何开发一个新的黑盒扫描器
+## 如何开发一个新的黑盒扫描器
 ```
 1. 在dongtai_usb/目录下创建一个新的文件夹，文件夹名字为黑盒扫描器的名字
 2. 在新建的文件夹下创建三个子目录,可参考xray目录
@@ -114,7 +115,7 @@ Response 结构体详解
 	1. Vultype 为漏洞类型命名
 	2. VulLevel 为漏洞等级命名
 ```
-漏洞类型等级对应关系
+### 漏洞类型等级对应关系
 ```
 func Vultype() map[string]string {
 	return map[string]string{
@@ -143,7 +144,18 @@ func VulLevel() map[string]string {
 	}
 }
 ```
-### 开发完成后在main方法添加路由接收即可，如xray
+### 运行方式为两个场景
 ```
+推流模式(webhook)：即黑盒扫描器主动推送数据给dongtai_usb
+拉流模式(cron): 即dongtai_usb主动从黑盒扫描器定时拉取数据
+```
+
+![Alt text](image-3.png)
+### 开发完成后在main方法添加启用即可，如xray
+```
+推流模式(webhook):
 router.POST("/v1/xray", USB_Xray.Xray)
+
+拉流模式(cron):
+usb.Cron("xray", USB_Xray.Xray_cron)
 ```

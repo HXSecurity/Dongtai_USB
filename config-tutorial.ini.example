@@ -5,5 +5,6 @@ ip = 127.0.0.1,177.7.0.11,192.168.0.0/24
 iast_url = http://127.0.0.1/api/v1/dast_webhook
 dast_token = 837e62834b8423418c2a2a311c6
 
+; type = xray
 ; xray_url = https://127.0.0.1/api/v2/vuln/filter/
 ; xray_token = xxxxx
