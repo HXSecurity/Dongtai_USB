@@ -165,6 +165,9 @@ func VulLevel() map[string]string {
 	}
 }
 ```
+
+洞态支持的漏洞类型可参照: https://github.com/HXSecurity/DongTai/blob/main/static/data/vul_strategy.json 此文件中的 `vul_type` 即为漏洞类型
+
 ### 运行方式为两个场景
 ```
 推流模式(webhook)：即黑盒扫描器主动推送数据给dongtai_usb
