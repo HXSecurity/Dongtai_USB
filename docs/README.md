@@ -159,7 +159,7 @@ func VulLevel() map[string]string {
 		"cmd-injection":  "HIGH",
 		"path-traversal": "HIGH",
 		"xxe":            "MEDIUM",
-		"ssrf":           "ssrf",
+		"ssrf":           "HIGH",
 		"brute-force":    "LOW",
 		"redirect":       "LOW",
 	}
