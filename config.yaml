@@ -112,7 +112,7 @@ reverse:
   token: "834b8423418c2a2a311c69fb968318nw"                             # 反连平台认证的 Token, 独立部署时不能为空
   http:
     enabled: true
-    listen_ip: 177.7.0.11
+    listen_ip: 177.25.0.11
     listen_port: "8091"
     ip_header: ""                       # 在哪个 http header 中取 ip，为空代表从 REMOTE_ADDR 中取
   dns:

@@ -1,11 +1,11 @@
 version: "3"
 
 networks:
-  network:
+  dongtainetworkxray:
+    name: dongtainetworkxray
     ipam:
-      driver: default
       config:
-        - subnet: '177.7.0.0/16'
+        - subnet: '177.25.0.0/16'
 services:
   xray:
     image: registry.cn-beijing.aliyuncs.com/huoxian_pub/xray:v0.1.4
@@ -17,8 +17,8 @@ services:
     ports:
       - '8091:8091'
     networks:
-      network:
-        ipv4_address: 177.7.0.11
+      dongtainetworkxray:
+        ipv4_address: 177.25.0.11
 
   usb:
     image: registry.cn-beijing.aliyuncs.com/huoxian_pub/usb:v0.1.4
@@ -26,8 +26,8 @@ services:
     volumes:
       - ./config-tutorial.ini:/opt/config-tutorial.ini
     networks:
-      network:
-        ipv4_address: 177.7.0.12
+      dongtainetworkxray:
+        ipv4_address: 177.25.0.12
 
   mitmproxy:
     image: registry.cn-beijing.aliyuncs.com/huoxian_pub/mitmproxy:v0.1.4
@@ -39,8 +39,8 @@ services:
       - '10802:10802'
       - '8090:8000'
     networks:
-      network:
-        ipv4_address: 177.7.0.13
+      dongtainetworkxray:
+        ipv4_address: 177.25.0.13
   jsc:
     image: joychou/jsc:latest
     command: ["java","-javaagent:/agent/dongtai-agent.jar","-Ddongtai.app.name=xray-test","-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8000", "-jar", "jsc.jar"]
@@ -52,10 +52,10 @@ services:
     links:
       - j_mysql
     networks:
-      network:
-        ipv4_address: 177.7.0.15
+      dongtainetworkxray:
+        ipv4_address: 177.25.0.15
   j_mysql:
     image: joychou/jsc_mysql:latest
     networks:
-      network:
-        ipv4_address: 177.7.0.16
+      dongtainetworkxray:
+        ipv4_address: 177.25.0.16
