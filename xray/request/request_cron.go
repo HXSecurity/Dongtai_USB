@@ -76,7 +76,7 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 		Response := &service.Response{
 			VulName:         xray_max.Target.URL + " " + xray_max.Category,
 			Detail:          "在" + xray_max.Target.URL + "发现了" + xray_max.Title,
-			VulLevel:        (model.VulLevel()[engine_Xray.VulType(xray_max.Category)]),
+			VulLevel:        model.GetVulLevel(engine_Xray.VulType(xray_max.Category)),
 			Urls:            engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Urls,
 			Payload:         fmt.Sprintf("%s", xray_max.Target.Params...),
 			CreateTime:      time.Now().Unix(),
@@ -85,7 +85,7 @@ func (s *USB_Xray) Xray_cron(before time.Time, after time.Time) {
 			Target:          xray_max.Target.URL,
 			DtUUIDID:        engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).DtuuidID,
 			AgentID:         engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).AgentID,
-			DongtaiVulType:  []string{(model.Vultype()[engine_Xray.VulType(xray_max.Category)])},
+			DongtaiVulType:  []string{model.GetVultype(engine_Xray.VulType(xray_max.Category))},
 			DastTag:         "Xray",
 			Dtmark:          engine_Xray.EngineXray(Connection[0].Response.Header.Get("Dt-Request-Id"), Connection, len(Connection)).Dtmark,
 		}

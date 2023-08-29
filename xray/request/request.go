@@ -48,7 +48,7 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 	Response := &service.Response{
 		VulName:         request.Data.Target.URL + " " + engine_Xray.VulType(request.Data.Plugin),
 		Detail:          "在" + request.Data.Target.URL + "发现了" + engine_Xray.VulType(request.Data.Plugin),
-		VulLevel:        (model.VulLevel()[engine_Xray.VulType(request.Data.Plugin)]),
+		VulLevel:        model.GetVulLevel(engine_Xray.VulType(request.Data.Plugin)),
 		Urls:            engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Urls,
 		Payload:         request.Data.Detail.Payload,
 		CreateTime:      time.Now().Unix(),
@@ -57,7 +57,7 @@ func (s *USB_Xray) Xray(context *gin.Context) {
 		Target:          request.Data.Target.URL,
 		DtUUIDID:        engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).DtuuidID,
 		AgentID:         engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).AgentID,
-		DongtaiVulType:  []string{(model.Vultype()[engine_Xray.VulType(request.Data.Plugin)])},
+		DongtaiVulType:  []string{model.GetVultype(engine_Xray.VulType(request.Data.Plugin))},
 		DastTag:         "Xray",
 		Dtmark:          engine_Xray.EngineXray(res[0].Response.Header.Get("Dt-Request-Id"), res, len(request.Data.Detail.Snapshot)).Dtmark,
 	}

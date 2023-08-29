@@ -1,6 +1,6 @@
 package model
 
-func Vultype() map[string]string {
+func vultype() map[string]string {
 	return map[string]string{
 		"xss":            "reflected-xss",
 		"sqldet":         "sql-injection",
@@ -12,7 +12,7 @@ func Vultype() map[string]string {
 		"redirect":       "unvalidated-redirect",
 	}
 }
-func VulLevel() map[string]string {
+func vulLevel() map[string]string {
 	return map[string]string{
 		"xss":            "MEDIUM",
 		"sqldet":         "HIGH",
@@ -22,5 +22,22 @@ func VulLevel() map[string]string {
 		"ssrf":           "ssrf",
 		"brute-force":    "LOW",
 		"redirect":       "LOW",
+	}
+}
+func GetVultype(input string) string {
+	value, ok := vultype()[input]
+	if ok {
+		return value
+	} else {
+		return input
+	}
+}
+
+func GetVulLevel(input string) string {
+	value, ok := vulLevel()[input]
+	if ok {
+		return value
+	} else {
+		return "HIGH"
 	}
 }
