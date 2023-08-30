@@ -10,6 +10,9 @@ func vultype() map[string]string {
 		"ssrf":           "ssrf",
 		"brute-force":    "crypto-bad-ciphers",
 		"redirect":       "unvalidated-redirect",
+		"crlf-injection": "header-injection",
+		"upload":         "path-traversal",
+		"xstream":        "unsafe-json-deserialize",
 	}
 }
 func vulLevel() map[string]string {
@@ -22,6 +25,9 @@ func vulLevel() map[string]string {
 		"ssrf":           "ssrf",
 		"brute-force":    "LOW",
 		"redirect":       "LOW",
+		"crlf-injection": "LOW",
+		"upload":         "HIGH",
+		"xstream":        "HIGH",
 	}
 }
 func GetVultype(input string) string {
